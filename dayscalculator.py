@@ -49,7 +49,7 @@ def calculation():
     print(startday)
     print(startmonth)
     print(startyear)
-    
+
 
 selected_month = tk.StringVar()
 month_cb = ttk.Combobox(root, textvariable=selected_month, width=7)
@@ -83,6 +83,7 @@ gapCreation(190)
 
 year_entry = tk.Entry(width=7)
 year_entry.pack(padx=40,pady=20)
+year_entry.set(year_entry.get()[:4])
 currentYear = datetime.today().strftime('%Y')
 year_entry.insert(0,currentYear)
 year_entry.place(x=210,y=90)
