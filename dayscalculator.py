@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter.messagebox import showinfo
 from datetime import datetime
+from datetime import date
 from calendar import month_name
 from calendar import day_name
 
@@ -43,12 +44,42 @@ def daycomboboxset(comparison):
 
 
 def calculation():
-    startday = day_cb.get()
-    startmonth = month_cb.get()
-    startyear = year_entry.get()
-    print(startday)
-    print(startmonth)
-    print(startyear)
+    startday = datetime.today().strftime('%d')
+    startday = int(startday)
+    startmonth = datetime.today().strftime('%m')
+    startmonth = int(startmonth)
+    startyear = datetime.today().strftime('%Y')
+    startyear = int(startyear)
+    startdate = date(startyear, startmonth, startday)
+
+    endday = day_cb.get()
+    endday = int(endday)
+    endmonth = month_cb.get()
+    months = []
+    for items in month_cb['values']:
+        months.append(items)
+    for index, item in enumerate(months):
+        if item == endmonth:
+            endmonth = index + 1 
+            break
+    endyear = year_entry.get()
+    endyear = int(endyear)
+    enddate = date(endyear, endmonth, endday)
+
+    calculate = enddate - startdate
+    daydifference = calculate.days
+    popupmessage(daydifference)
+
+
+def popupmessage(ammoutdays):
+    if ammoutdays == 0:
+        showinfo(title='Berekening', message='Dit is vandaag')
+    elif ammoutdays > 0:
+        showinfo(title='Berekening', message=('Dit is ' + str(ammoutdays) + ' dagen in de toekomst'))
+    elif ammoutdays < 0:
+        negativedays = str(ammoutdays)
+        ammoutdays = int(negativedays[1:])
+        showinfo(title='Berekening', message=('Dit is ' + str(ammoutdays) + ' dagen in het verleden'))
 
 
 selected_month = tk.StringVar()
@@ -83,7 +114,6 @@ gapCreation(190)
 
 year_entry = tk.Entry(width=7)
 year_entry.pack(padx=40,pady=20)
-year_entry.set(year_entry.get()[:4])
 currentYear = datetime.today().strftime('%Y')
 year_entry.insert(0,currentYear)
 year_entry.place(x=210,y=90)
@@ -91,6 +121,5 @@ year_entry.place(x=210,y=90)
 button = tk.Button(text='Calculate', command=calculation)
 button.pack(ipadx=10,ipady=10)
 button.place(x=120,y=150)
-
 
 root.mainloop()
